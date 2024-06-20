@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\api",
+    "\\api\\middleware",
+    "\\api\\routes"
   ],
   "PreviewInSolutionExplorer": false
 }

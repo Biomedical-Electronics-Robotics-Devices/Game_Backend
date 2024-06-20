@@ -1,5 +1,154 @@
-//some if have instructor commented out when you fix it you should also use patient where the instructor is commented out
+//Fix later this script is not added anywhere
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+
+const User = require("../models/users");
+const Exercise = require("../models/exercises");
+const Task = require("../models/tasks")
+const Pose = require("../models/poses");
+const Level = require("../models/levels");
+
+
+exports.general = (req, res, next) => {
+	try {
+		
+		const token = req.headers.authorization.split(" ")[1];
+		
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
+		
+		req.userData = decoded;
+
+		if (req.userData.role !== "patient") {
+			
+			// Also here we can check on object-level permissions; eg. is this exercise created by you? If not you can not delete it
+			return res.status(401).json({
+				message: "Auth failed!"
+			});
+		}
+		next();
+	} catch (error) {
+		return res.status(401).json({
+			message: "Auth failed!"
+		});
+	}
+};
+
+
+exports.isSelf = (req, res, next) => {
+	try {
+		const token = req.headers.authorization.split(" ")[1];
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
+		req.userData = decoded;
+
+		if (req.params.userId !== req.userData.userId){
+			return res.status(401).json({
+				message: "Auth failed"
+			});
+		}
+		next();
+	} catch (error) {
+		return res.status(401).json({
+			message: "Auth failed!"
+		});
+	}
+}
+
+
+
+exports.getPatient = (req, res, next) => {
+	try {
+		const token = req.headers.authorization.split(" ")[1];
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+		req.userData = decoded;
+
+		if (req.userData.role !== "patient") {
+			// Also here we can check on object-level permissions; eg. is this exercise created by you? If not you can not delete it
+			return res.status(401).json({
+				message: "Auth failed!"
+			});
+		}
+		
+		next();
+	} catch (error) {
+		return res.status(401).json({
+			message: "Auth failed!"
+		});
+	}
+}
+
+exports.accessTask = (req, res, next) => {
+	try {
+		const token = req.headers.authorization.split(" ")[1];
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+		req.userData = decoded;
+
+		if (req.userData.role !== "patient") {
+			console.log("user prob");
+			// Also here we can check on object-level permissions; eg. is this exercise created by you? If not you can not delete it
+			return res.status(401).json({
+				message: "Auth failed!"
+			});
+		} else {
+			User.findOne({"_id": req.userData.userId}, "tasks", (err, user) =>{
+				if (err){
+					console.log("err prob");
+					res.status(401).json({
+						message: "Auth failed"
+					});
+				} else if (!user){
+					console.log("user not found prob");
+					res.status(401).json({
+						message: "Auth failed"
+					});
+				} else if (!user.tasks.includes(req.params.taskId)) {
+					Task.findOne({"_id": req.params.taskId}, (err, task) =>{
+						if (task.isPublic){
+							next();
+						} else {
+							res.status(401).json({
+								message: "Auth failed"
+							});
+						}
+					});
+				} else {
+					next();
+				}
+			});
+		}
+
+		
+	} catch (error) {
+		return res.status(401).json({
+			message: "Auth failed!"
+		});
+	}
+}
+
+exports.accessExercise = (req, res, next) => {
+	try {
+		const token = req.headers.authorization.split(" ")[1];
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+		req.userData = decoded;
+
+		if (req.userData.role !== "patient") {
+			console.log("user prob");
+			// Also here we can check on object-level permissions; eg. is this exercise created by you? If not you can not delete it
+			return res.status(401).json({
+				message: "Auth failed!"
+			});
+		} else {
+			User.findOne({"_id": req.userData.userId}, "exercises", (err, user) =>{
+				if (err){
+					console.log("err prob");
+					res.status(401).json({
+						message: "Auth failed"
+					});
+				} else if (!user){
+					console.log("user not found prob");
+					res.status(401).json({const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const User = require("../models/users");
@@ -477,6 +626,86 @@ exports.accessLevel = (req, res, next) => {
 				}
 			});
 		//}
+
+		
+	} catch (error) {
+		return res.status(401).json({
+			message: "Auth failed!"
+		});
+	}
+}
+						message: "Auth failed"
+					});
+				} else if (!user.exercises.includes(req.params.exerciseId)) {
+					Exercise.findOne({"_id": req.params.exerciseId}, (err, exercise) =>{
+						if (exercise.isPublic){
+							next();
+						} else {
+							res.status(401).json({
+								message: "Auth failed"
+							});
+						}
+					});
+				} else {
+					next();
+				}
+			});
+		}
+
+		
+	} catch (error) {
+		return res.status(401).json({
+			message: "Auth failed!"
+		});
+	}
+}
+
+exports.accessLevel = (req, res, next) => {
+	try {
+		const token = req.headers.authorization.split(" ")[1];
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+		req.userData = decoded;
+
+		if (req.userData.role !== "patient") {
+			console.log("user prob");
+			// Also here we can check on object-level permissions; eg. is this exercise created by you? If not you can not delete it
+			return res.status(401).json({
+				message: "Auth failed!"
+			});
+		} else {
+			User.findOne({"_id": req.userData.userId}, "levels", (err, user) =>{
+				if (err){
+					console.log("err prob");
+					res.status(401).json({
+						message: "Auth failed"
+					});
+				} else if (!user){
+					console.log("user not found prob");
+					res.status(401).json({
+						message: "Auth failed"
+					});
+				} else if (!user.levels.includes(req.params.levelId)) {
+					Level.findOne({"_id": req.params.levelId}, (err, level) =>{
+						if (err){
+							res.status(500).json({
+								error: err
+							});
+						} else {
+							if (level.isPublic){
+								next();
+							} else {
+								res.status(401).json({
+									message: "Auth failed"
+								});
+							}
+						}	
+					});
+				} else {
+					next();
+				}
+			});
+		}
 
 		
 	} catch (error) {

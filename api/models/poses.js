@@ -32,7 +32,23 @@ const poseSchema = mongoose.Schema({
         TzR: { type: String, required: true, default: 0 },
         CxR: { type: String, required: true, default: 0 },
         CyR: { type: String, required: true, default: 0 },
-        CzR: { type: String, required: true, default: 0 }
+        CzR: { type: String, required: true, default: 0 },
+        HiL: { type: String, required: true, default: 0 },
+        HtL: { type: String, required: true, default: 0 },
+        HmL: { type: String, required: true, default: 0 },
+        HrL: { type: String, required: true, default: 0 },
+        HpL: { type: String, required: true, default: 0 },
+        HiR: { type: String, required: true, default: 0 },
+        HtR: { type: String, required: true, default: 0 },
+        HmR: { type: String, required: true, default: 0 },
+        HrR: { type: String, required: true, default: 0 },
+        HpR: { type: String, required: true, default: 0 },
+        HiR: { type: String, required: true, default: 0 },
+        HtR: { type: String, required: true, default: 0 },
+        HmR: { type: String, required: true, default: 0 },
+        HrR: { type: String, required: true, default: 0 },
+        HpR: { type: String, required: true, default: 0 }
+
         // HxR: {type: String, required: true, default: 0},
         // HzR: {type: String, required: true, default: 0}   
     }

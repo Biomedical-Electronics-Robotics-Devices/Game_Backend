@@ -14,6 +14,7 @@ const User = require('../models/users');
 
 const authSubject = require("../middleware/auth-subject");
 const authInstructor = require("../middleware/auth-instructor");
+//const authPatient= require("../middleware/auth-patient");
 const authAdmin = require('../middleware/auth-admin');
 const users = require('../models/users');
 
