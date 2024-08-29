@@ -499,6 +499,25 @@ router.patch('/updatePrescription/:patientId', authInstructor.general, (req, res
 	})
 });
 
+router.patch('/updateBelt/:patientId', authInstructor.general, (req, res, next) => {
+    User.updateOne(
+        { "_id": req.params.patientId }, 
+        { $set: {  "analytics.belt": req.body.belt } }, // Assuming the new belt value is passed in req.body.belt
+        (err) => {
+            if (err) {
+                res.status(500).json({
+                    error: err
+                });
+            } else {
+                res.status(200).json({
+                    message: "Patient belt updated"
+                });
+            }
+        }
+    );
+});
+
+
 router.patch('/changeRole', authAdmin, (req, res, next) => {
 	
 	User.updateOne({"_id": req.body.userId}, {$set: {"role": req.body.newRole}}, (err) => {
