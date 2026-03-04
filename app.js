@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 	next();
 });
 // mongoose.connect(process.env.MONGO_URI);
-mongoose.connect("mongodb+srv://neurosuitupUser:XgAwqKwAGMcGwh6mYU9BDUfwP@cluster0.trk73.mongodb.net/cluster0", (err)=>{
+mongoose.connect(process.env.MONGO_URI, (err)=>{
 	if (err){
 		console.log(err)
 	} else {
